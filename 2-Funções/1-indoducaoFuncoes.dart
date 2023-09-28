@@ -1,7 +1,7 @@
 void main() {
   saudacoes();
 
-  String tempo = agora();
+  //String tempo = agora();
   // print(tempo);
   // print(agora());
 }
