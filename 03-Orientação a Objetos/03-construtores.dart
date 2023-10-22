@@ -1,13 +1,12 @@
 void main() {
   //objeto Pessoa criado dentro da variavel pessoa1
-  Pessoa pessoa1 = Pessoa(nome: 'Bruno', idade: 24);
+  Pessoa pessoa1 = Pessoa.solteira(nome: 'Bruno', idade: 24);
   print(pessoa1.nome);
   print(pessoa1.idade);
   print(pessoa1.aniversario());
-  pessoa1.casar();
   print(pessoa1.casado);
 
-  Pessoa pessoa2 = Pessoa(nome: 'Daniel', idade: 29);
+  Pessoa pessoa2 = Pessoa.casada(nome: 'Daniel', idade: 29);
   pessoa2.casado = true;
   print(pessoa2.nome);
   print(pessoa2.idade);
@@ -21,9 +20,14 @@ void main() {
 
 //classe
 class Pessoa {
-  Pessoa({required this.nome, required this.idade}){
+  Pessoa({required this.nome, required this.idade, this.casado = false}) {
     print('Criando o $nome com idade $idade');
   }
+
+  Pessoa.casada({required this.nome, required this.idade, this.casado = false});
+
+  Pessoa.solteira(
+      {required this.nome, required this.idade, this.casado = false});
 
   String nome;
   int idade;
