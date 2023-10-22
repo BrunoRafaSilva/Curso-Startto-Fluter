@@ -18,9 +18,7 @@ void main() {
   print(ddds);
 
   String? cidade = ddds[15] ?? 'Não Informado';
-  if (cidade != null) {
-    print(cidade.toLowerCase());
-  }
+  print(cidade.toLowerCase());
 
   // é necessário ter certeza que esse retorno não será null null assertion
   String cidade2 = ddds[11]!;

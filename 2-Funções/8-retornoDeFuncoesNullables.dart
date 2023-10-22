@@ -24,5 +24,6 @@ String funcao2(int x) {
 String? funcao3(int x) {
   if (x > 10) {
     return 'Olá Mundo';
-  } //aqui já pode ter o valor nulo
+  }
+  return null; //aqui já pode ter o valor nulo
 }

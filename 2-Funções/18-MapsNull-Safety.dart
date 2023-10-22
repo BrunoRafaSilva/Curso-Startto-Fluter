@@ -12,9 +12,7 @@ void main() {
   ddds2 = {11: 'Seu Paulo', 82: 'Maceyork', 41: 'Curitiba'};
   print(ddds2);
 
-  if (ddds2 != null) {
-    ddds2.remove(11);
-  }
+  ddds2.remove(11);
   ;
   print(ddds2);
 
