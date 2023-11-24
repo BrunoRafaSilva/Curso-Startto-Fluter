@@ -14,6 +14,8 @@ class _TodoListPageState extends State<TodoListPage> {
   final TextEditingController todoController = TextEditingController();
 
   List<Todo> todos = [];
+  Todo? deletedTodo;
+  int? deletedTodoPos;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +38,7 @@ class _TodoListPageState extends State<TodoListPage> {
                           hintText: 'Ex. Estudar muito.'),
                     ),
                   ),
-                  const SizedBox(
-                    width: 8,
-                  ),
+                  const SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: () {
                       String text = todoController.text;
@@ -72,6 +72,7 @@ class _TodoListPageState extends State<TodoListPage> {
                     for (Todo todo in todos)
                       TodoListItem(
                         todo: todo,
+                        onDelete: onDelete,
                       ),
                   ],
                 ),
@@ -90,7 +91,7 @@ class _TodoListPageState extends State<TodoListPage> {
                     width: 8,
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: showDeleteTodosConfirmationDialog,
                     child: Text('Limpar tudo'),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Color.fromARGB(255, 56, 98, 104),
@@ -103,5 +104,76 @@ class _TodoListPageState extends State<TodoListPage> {
         ),
       )),
     );
+  }
+
+  //Passar o conteudo filho (item adicionado a lista para o arquuivo todo_list_item.dart conseguir enxeger com callback)
+
+  void onDelete(Todo todo) {
+    //configurando para poder recuperar o item deletado
+    deletedTodo = todo;
+    deletedTodoPos = todos.indexOf(todo);
+
+    //setState é para que ao remover a tela atualize.
+    setState(() {
+      todos.remove(todo);
+    });
+
+    //utilizado para que ao deletar itens seguidos a mensagem seja limpa apareça o novo deletado
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Tarefa ${todo.title} foi removida com sucesso!',
+          style: TextStyle(color: Color(0xff060708)),
+        ),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        action: SnackBarAction(
+          label: 'Desfazer',
+          textColor: Color.fromARGB(255, 45, 179, 78),
+          onPressed: () {
+            setState(() {
+              todos.insert(deletedTodoPos!, deletedTodo!);
+            });
+          },
+        ),
+        duration: const Duration(seconds: 5),
+      ),
+    );
+  }
+
+  void showDeleteTodosConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Limpar Tudo?'),
+        content: const Text("Tem certeza que deseja apagar todas as tarefas?"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            style: TextButton.styleFrom(
+                foregroundColor: const Color.fromARGB(255, 56, 98, 104)),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              deleteAllTodos();
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: const Color.fromARGB(255, 247, 8, 0),
+            ),
+            child: const Text('Confirmar'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void deleteAllTodos() {
+    setState(() {
+      todos.clear();
+    });
   }
 }
